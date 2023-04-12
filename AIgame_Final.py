@@ -1,9 +1,24 @@
 import tkinter as tk
+from io import StringIO
 #te ir loop lai varetu atsakt speli pec beigam
 r = 1
 while r != 2:
     #n ir skaitlis no kura mes atnemam, to var mainit,jo koks tiek generets. Bet uzskatu ka saja gadijuma tas nav vajadzigs.
     n = 20
+#buffer kas kope output un parvieto popup window
+    def popup_buffer(buffer):
+        if not hasattr(popup_buffer, 'popup_window'):
+            popup_buffer.popup_window = tk.Toplevel()
+            popup_buffer.popup_window.title('Output')
+            output_label = tk.Label(popup_buffer.popup_window, text=buffer.getvalue())
+            output_label.pack()
+            popup_buffer.popup_window.grab_set()
+            popup_buffer.popup_window.focus_force()
+            popup_buffer.popup_window.wait_window()
+            popup_buffer.popup_window.destroy()
+            del popup_buffer.popup_window
+    output_buffer = StringIO()
+
     #GUI izvelamies kas ak speli, es vai dators
     def button1_click():
         global k
@@ -32,7 +47,6 @@ while r != 2:
         for j in range(n - 1):
             mas[i][j] = n - 1 - i - j
 
-
     # izvadam so massivu
     #   print(mas[i][j], end=" ")
     # print()
@@ -58,7 +72,6 @@ while r != 2:
     for i in range(n - 3, -1, -1):
         for j in range(0, n - i - 2):
             if j != n - 3:  # lai nebutu out of bounds
-
                 if (i % 2 == 0):  # parbaudam limeni
                     a = new_mas[i + 1][j]
                     if new_mas[i + 1][j + 1] != "n":  # parbaudam vai deriga virsotne
@@ -69,9 +82,7 @@ while r != 2:
                         c = new_mas[i + 1][j + 2]
                     else:
                         c = None
-
                     if (b == None and c == None):
-
                         new_mas[i][j] = a
                     #  print(a, new_mas[i][j],"max")
                     elif (b == None and c != None):
@@ -105,7 +116,6 @@ while r != 2:
                     else:
                         new_mas[i][j] = min(a, b, c)
                     # print(a,b,c, new_mas[i][j],"min")
-
         # Izvadam ar MinMax modificetu koku.
         '''
     print("\nLast Array:\n")
@@ -124,26 +134,26 @@ while r != 2:
         if (new_mas[index[0]][index[1] + 2] == 1):
             n = n - 3
             index = (index[0] + 1, index[1] + 2)
-            print(n, "jo tika atnemts -3")
+            print(n,"jo tika atnemts -3", file=output_buffer)
           #  print(index)
         elif (new_mas[index[0]][index[1] + 1] == 1):
             n = n - 2
             index = (index[0] + 1, index[1] + 1)
-            print(n, "jo tika atnemts -2")
+            print(n, "jo tika atnemts -2", file=output_buffer)
             #print(index)
 
         elif (new_mas[index[0]][index[1]] == 1):
 
             n = n - 1
             index = (index[0] + 1, index[1])
-            print(n, "jo tika atnemts -1")
+            print(n, "jo tika atnemts -1", file=output_buffer)
             # print(index)
         elif (new_mas[index[0]][index[1]] == -1):
 
             n = n - 1
             index = (index[0] + 1, index[1])
 
-            print(n, "jo tika atnemts -1")
+            print(n, "jo tika atnemts -1", file=output_buffer)
             # print(index)
 
 
@@ -151,50 +161,49 @@ while r != 2:
 
             n = n - 2
             index = (index[0] + 1, index[1])
-            print(index)
-            # print(n, "-2")
+
+            print(n,"jo tika atnemts -2", file=output_buffer)
         elif (new_mas[index[0]][index[1] + 2] == -1):
 
             n = n - 3
             index = (index[0] + 1, index[1] + 2)
-            print(n, "jo tika atnemts -3")
+            print(n,"jo tika atnemts -3", file=output_buffer)
             # print(index)
-
-
+        popup_buffer(output_buffer)
     def gajiens2():
         global n
         global index
         if (new_mas[index[0]][index[1] + 2] == -1):
             n = n - 3
             index = (index[0] + 1, index[1] + 2)
-            print(n, "jo tika atnemts -3")
+            print(n, "jo tika atnemts -3", file=output_buffer)
             # print(index)
         elif (new_mas[index[0]][index[1] + 1] == -1):
             n = n - 2
             index = (index[0] + 1, index[1] + 1)
-            print(n, "jo tika atnemts -2")
+            print(n, "jo tika atnemts -2", file=output_buffer)
             #  print(index)
         elif (new_mas[index[0]][index[1]] == -1):
             n = n - 1
             index = (index[0] + 1, index[1])
-            print(n, "jo tika atnemts -1")
+            print(n, "jo tika atnemts -1", file=output_buffer)
             #  print(index)
         elif (new_mas[index[0]][index[1]] == 1):
             n = n - 1
             index = (index[0] + 1, index[1])
-            print(n, "jo tika atnemts -1")
+            print(n, "jo tika atnemts -1", file=output_buffer)
             #  print(index)
         elif (new_mas[index[0]][index[1] + 1] == 1):
             n = n - 2
             index = (index[0] + 1, index[1])
-            print(n, "jo tika atnemts -2")
+            print(n, "jo tika atnemts -2", file=output_buffer)
             #   print(index)
         elif (new_mas[index[0]][index[1] + 2] == 1):
             n = n - 3
             index = (index[0] + 1, index[1] + 2)
-            print(n, "jo tika atnemts -3")
+            print(n, "jo tika atnemts -3", file=output_buffer)
             #   print(index)
-
+        popup_buffer(output_buffer)
  #Parbaide vai sasniedzam koka beigas
     def check():
         global j
@@ -212,14 +221,17 @@ while r != 2:
             index[1] + 2] == "n"):
             j = False
         if ((n == 1) and (j % 2 == 0) and (k == 1)):
-            print("dators uzvareja")
+            print("dators uzvareja", file=output_buffer)
+            popup_buffer(output_buffer)
         elif ((n == 1) and (j % 2 == 1) and (k == 1)):
-            print("dators zaudeja")
+            print("dators zaudeja", file=output_buffer)
+            popup_buffer(output_buffer)
         elif n < 1:
             print("tu zaudeji")
+            popup_buffer(output_buffer)
         if ((n == 2) and (i % 2 == 0)):
-            print("tu zaudeji, dators izvelas -1")
-
+            print("tu zaudeji, dators izvelas -1, file=output_buffer")
+            popup_buffer(output_buffer)
 
     def check2():
         global j
@@ -236,12 +248,14 @@ while r != 2:
             index[1] + 2] == "n"):
             j = False
         if n == 1:
-            print("tu uzvareji")
-
+            print("tu uzvareji", file=output_buffer)
+            popup_buffer(output_buffer)
         elif n < 1:
-            print("tu zaudeji")
+            print("tu zaudeji", file=output_buffer)
+            popup_buffer(output_buffer)
         if ((n == 2) and (i % 2 == 0)):
-            print("tu zaudejii, dators izvelas -1 ")
+            print("tu zaudejii, dators izvelas -1 ", file=output_buffer)
+            popup_buffer(output_buffer)
 
 #Definejam speletaja gajienu
     def mansg():
@@ -270,19 +284,19 @@ while r != 2:
         if x == 1:
             index = (index[0] + 1, index[1])
             n = n - 1
-            print(n, "jo tika atnemts -1")
+            print(n, "jo tika atnemts -1", file=output_buffer)
 
         elif x == 2:
             index = (index[0] + 1, index[1] + 1)
             n = n - 2
-            print(n, "jo tika atnemts -2")
+            print(n, "jo tika atnemts -2", file=output_buffer)
 
         elif x == 3:
             index = (index[0] + 1, index[1] + 2)
             n = n - 3
-            print(n, "jo tika atnemts -3")
+            print(n, "jo tika atnemts -3", file=output_buffer)
     #    print(index)
-
+        popup_buffer(output_buffer)
 #Ja dators saka speli
     if k == 0:
         while j:
@@ -305,7 +319,6 @@ while r != 2:
             check()
             if j == False:
                 break
-
 pass
 
 
